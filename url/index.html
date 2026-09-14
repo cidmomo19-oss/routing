@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- PENTING: Menghapus data referer (Ad network membaca trafik sebagai Direct) -->
+    <meta name="referrer" content="no-referrer">
+    
+    <!-- Anti-cache agar browser selalu mengeksekusi rotasi terbaru -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <title>Redirecting...</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #0f172a;
+            color: #94a3b8;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .loader-box {
+            text-align: center;
+        }
+        .spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid rgba(148, 163, 184, 0.2);
+            border-top: 3px solid #38bdf8;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin: 0 auto 12px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loader-box">
+        <div class="spinner"></div>
+        <p style="font-size: 14px;">Memuat halaman tujuan...</p>
+    </div>
+
+    <script>
+        // Daftar URL iklan direct
+        const adUrls = [
+            "https://omg10.com/4/10390860",
+            "https://conductivebreeds.com/tezfbsg8s?key=7eb81e5d6d4871616cac899e31da5d3e",
+            "https://onepyrincehyarey.org?Akzuj=1720200"
+        ];
+
+        const STORAGE_KEY = "active_ad_route_seq";
+
+        // 1. Ambil index terakhir yang tersimpan di memori browser
+        let currentIndex = parseInt(localStorage.getItem(STORAGE_KEY), 10);
+
+        if (isNaN(currentIndex) || currentIndex < 0 || currentIndex >= adUrls.length) {
+            currentIndex = 0;
+        }
+
+        // 2. Ambil URL target saat ini
+        const targetUrl = adUrls[currentIndex];
+
+        // 3. Simpan rotasi berikutnya ke localStorage
+        const nextIndex = (currentIndex + 1) % adUrls.length;
+        localStorage.setItem(STORAGE_KEY, nextIndex.toString());
+
+        // 4. Eksekusi redirect dengan proteksi no-referrer ganda
+        setTimeout(() => {
+            const link = document.createElement("a");
+            link.href = targetUrl;
+            link.rel = "noreferrer noopener";
+            document.body.appendChild(link);
+            link.click();
+
+            // Fallback jika click simulasi dibatasi
+            setTimeout(() => {
+                window.location.replace(targetUrl);
+            }, 100);
+        }, 50);
+    </script>
+</body>
+</html>
