@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Mencegah halaman dicache agar script selalu dieksekusi -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Redirecting...</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #0d1117;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid #38bdf8;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div style="text-align: center;">
+        <div class="spinner"></div>
+        <p>Mengarahkan...</p>
+    </div>
+
+    <script>
+        // 1. Daftar URL iklan target
+        const adUrls = [
+            "https://omg10.com/4/10390860",
+            "https://conductivebreeds.com/tezfbsg8s?key=7eb81e5d6d4871616cac899e31da5d3e",
+            "https://onepyrincehyarey.org?Akzuj=1720200"
+        ];
+
+        const STORAGE_KEY = "last_ad_index";
+
+        // 2. Baca index terakhir dari localStorage
+        let currentIndex = parseInt(localStorage.getItem(STORAGE_KEY), 10);
+
+        // Jika belum pernah berkunjung atau nilai rusak, set ke index 0
+        if (isNaN(currentIndex) || currentIndex < 0 || currentIndex >= adUrls.length) {
+            currentIndex = 0;
+        }
+
+        // 3. Tentukan URL yang akan dibuka kali ini
+        const targetUrl = adUrls[currentIndex];
+
+        // 4. Siapkan index untuk kunjungan berikutnya (0 -> 1 -> 2 -> 0 -> dst)
+        const nextIndex = (currentIndex + 1) % adUrls.length;
+        localStorage.setItem(STORAGE_KEY, nextIndex.toString());
+
+        // 5. Redirect instan tanpa meninggalkan riwayat back button
+        window.location.replace(targetUrl);
+    </script>
+</body>
+</html>
